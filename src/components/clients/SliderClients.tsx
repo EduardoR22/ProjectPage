@@ -4,46 +4,43 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid"
 import { useEffect, useState } from "react"
 import Link from "next/link";
 
-export default function SliderProjects({projects, idProject}: {projects:any, idProject:string}){
-  
-  const [filter, setFilter] = useState<any[]>([]);
+export default function SliderClients({clients}: {clients:any}){
+  const [showClients, setShowClients] = useState<any[]>(clients);
   const [index, setIndex] = useState(0);
-  //const numberProjects = 4;
-  const filtered = projects.filter((project:any) => project._id !== idProject)
-
-  const [width, setWidth] = useState<number>(window.innerWidth);
-  const [numberProjects, setNumberProjects] = useState<number>(width<640? 1: (width<768? 2: (width<1024? 3: 4)));
+  const [width, setWidth] = useState<number>(0);
+  const [numberClients, setNumberClients] = useState<number>(width<640? 1: (width<768? 2: (width<1024? 3: 4)));
   
   const handleResize = () => {
     setWidth(window.innerWidth);
   }
 
   useEffect(() => {
+    setWidth(window.innerWidth)
     window.addEventListener("resize", handleResize, false);
   }, [])
 
   useEffect(() => {
-    setNumberProjects(width<640? 1: (width<768? 2: (width<1280? 3: 4)));
+    setNumberClients(width<640? 1: (width<768? 2: (width<1280? 3: 4)));
   }, [width])
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if(index >= filtered.length - 1){
+      if(index >= clients.length - 1){
         setIndex(0);
       }else{
         setIndex(index + 1);
       }
     }, 5000);
 
-    let count = filtered.length - (index + numberProjects);
+    let count = clients.length - (index + numberClients);
     
     if(count < 0){
       count = Math.abs(count);
-      const arr1 = filtered.slice(index, index + numberProjects);
-      const arr2 = filtered.slice(0, count);
-      setFilter([...arr1, ...arr2]);
+      const arr1 = clients.slice(index, index + numberClients);
+      const arr2 = clients.slice(0, count);
+      setShowClients([...arr1, ...arr2]);
     }else{
-      setFilter(filtered.slice(index, index + numberProjects));
+      setShowClients(clients.slice(index, index + numberClients));
     }
 
     return () => clearTimeout(timer);
@@ -53,12 +50,12 @@ export default function SliderProjects({projects, idProject}: {projects:any, idP
     if(index > 0){
       setIndex(index -1);
     }else{
-      setIndex(filtered.length -1);
+      setIndex(clients.length -1);
     }
   }
 
   const Next = () => {
-    if(index < filtered.length - 1){
+    if(index < clients.length - 1){
       setIndex(index+1)
     }else{
       setIndex(0);
@@ -67,7 +64,8 @@ export default function SliderProjects({projects, idProject}: {projects:any, idP
 
   return(
     <>
-      <h1 className="text-yellow-950 text-4xl my-3 font-semibold">Otros proyectos</h1>
+      <h1 className="text-yellow-950 text-4xl mt-5 my-3 font-semibold">Nuestros clientes</h1>
+      <h2 className="text-slate-700">Nuestros clientes satisfechos con nuestros servicios de construccion</h2>
       <div className="flex items-center">
         <div className='w-20'>
           <ChevronLeftIcon onClick={Previous}
@@ -75,11 +73,10 @@ export default function SliderProjects({projects, idProject}: {projects:any, idP
         </div>
 
         <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mt-10'>
-          {filter.map((project: any) => (
-            <Link key={project._id} href={`/${project._id}`}>
+          {showClients.map((client: any) => (
+            <Link key={client._id} href={`${client.link}`}>
               <div className=''>
-                <img src={project.images[0].photo} alt="image" className="w-full" />
-                <p className="lg:text-lg xl:text-2xl">{project.title}</p>
+                <img src={client.logo} alt="logo" className="w-full" />
               </div>
             </Link>
           ))}
@@ -91,5 +88,5 @@ export default function SliderProjects({projects, idProject}: {projects:any, idP
         </div>
       </div>
     </>
-  )
+  )  
 }

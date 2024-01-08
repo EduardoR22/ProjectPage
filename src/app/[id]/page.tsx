@@ -3,6 +3,7 @@ import SliderProjects from "@/components/projects/SliderProjects";
 import Card_2p from "@/components/projects/Card_2p";
 import ImageLink from "@/components/projects/ImageLink";
 import Header from "@/components/Header";
+import ServicesProject from "@/components/projects/ServicesProject";
 
 export default async function Project({ params }: { params: { id: string } }){
   let project;
@@ -44,10 +45,11 @@ export default async function Project({ params }: { params: { id: string } }){
       <div className="p-3 sm:p-5 md:p-7 lg:p-8 xl:p-10">
         <div className="relative">
           <img src={project.images[0].photo} alt="image" className="w-full" />
-          <h1 className="absolute top-5 left-5 text-xl text-yellow-950 font-bold">{project.title}</h1>
-          {services.map((serv:string, index:number) => (
+          <h1 className="absolute top-5 left-5 text-2xl lg:text-3xl xl:text-4xl text-yellow-950 font-bold">{project.title}</h1>
+          <ServicesProject services={services} />
+          {/* {services.map((serv:string, index:number) => (
             <p className="absolute right-10 text-white font-semibold" style={{top:`${(index * 25)+ 50}px`}} key={index}>{serv}</p>
-          ))}
+          ))} */}
         </div>
         
         <div className="flex justify-between flex-wrap mt-3">
